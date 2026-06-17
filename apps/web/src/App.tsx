@@ -185,7 +185,7 @@ function App() {
     shuffleRef.current = shuffleOnTrackChange;
   }, [shuffleOnTrackChange]);
 
-  const { state, refetch, setOptimisticProgress } = useNowPlaying();
+  const { state, refetch, setOptimisticProgress, setOptimisticIsPlaying } = useNowPlaying();
   const [albums, setAlbums] = useState<any[]>([]);
   const [playlists, setPlaylists] = useState<any[]>([]);
   const [likedSongs, setLikedSongs] = useState<any[]>([]);
@@ -237,9 +237,11 @@ function App() {
 
   // Stable callbacks for MiniPlayer (prevents React.memo invalidation)
   const handlePlayPause = useCallback(() => {
+    const nextState = !state?.isPlaying;
+    setOptimisticIsPlaying(nextState);
     if (state?.isPlaying) pause(); else play();
-    setTimeout(refetch, 500);
-  }, [state?.isPlaying, pause, play, refetch]);
+    setTimeout(refetch, 1000);
+  }, [state?.isPlaying, pause, play, refetch, setOptimisticIsPlaying]);
 
   const handleSkipNext = useCallback(() => {
     skipToNext(); setTimeout(refetch, 500);

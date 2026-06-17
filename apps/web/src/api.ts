@@ -28,6 +28,13 @@ export function useNowPlaying() {
     setState(prev => prev ? { ...prev, progressMs: newProgressMs } : prev);
   }, []);
 
+  const setOptimisticIsPlaying = useCallback((isPlaying: boolean) => {
+    isPlayingRef.current = isPlaying;
+    lastUpdateRef.current = Date.now();
+    lastSeekTimeRef.current = Date.now();
+    setState(prev => prev ? { ...prev, isPlaying } : prev);
+  }, []);
+
   const fetchPlayerState = useCallback(async () => {
     const token = await getValidAccessToken();
     if (!token) return;
@@ -145,7 +152,7 @@ export function useNowPlaying() {
     return () => cancelAnimationFrame(requestRef.current!);
   }, []);
 
-  return { state, refetch: fetchPlayerState, setOptimisticProgress };
+  return { state, refetch: fetchPlayerState, setOptimisticProgress, setOptimisticIsPlaying };
 }
 
 export function useTransportControls(onNoDevice?: () => void) {
