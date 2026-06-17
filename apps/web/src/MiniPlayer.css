@@ -192,20 +192,20 @@
   z-index: 100;
 }
 
-/* Auto-Hide ONLY triggers on Desktop or Landscape Mobile */
-@media (min-width: 900px), (max-height: 500px) and (orientation: landscape) {
+/* Auto-Hide ONLY triggers on Desktop Full-Screen or Landscape Mobile */
+@media (max-height: 500px) and (orientation: landscape) {
   .miniplayer-auto-hide-wrapper {
     position: absolute;
     bottom: 0;
     left: 0;
     right: 0;
-    padding-bottom: 150px; /* Massive hit area below */
-    margin-bottom: -100px; /* Offset the padding */
-    padding-top: 60px; /* Hit area above */
+    padding-bottom: 150px;
+    margin-bottom: -100px;
+    padding-top: 60px;
     transform: translateY(calc(100% - 70px));
     transition: transform 0.8s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.8s ease;
     opacity: 0;
-    pointer-events: none; /* Prevent blocking underneath */
+    pointer-events: none;
   }
 
   .miniplayer-auto-hide-wrapper:hover,
@@ -216,8 +216,33 @@
   }
 
   .miniplayer-auto-hide-wrapper > * {
-    pointer-events: auto; /* Re-enable pointer events for the player itself */
+    pointer-events: auto;
   }
+}
+
+.desktop-full-screen .miniplayer-auto-hide-wrapper {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding-bottom: 150px;
+  margin-bottom: -100px;
+  padding-top: 60px;
+  transform: translateY(calc(100% - 70px));
+  transition: transform 0.8s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.8s ease;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.desktop-full-screen .miniplayer-auto-hide-wrapper:hover,
+.desktop-full-screen .miniplayer-auto-hide-wrapper:active,
+.desktop-full-screen .miniplayer-auto-hide-wrapper:focus-within {
+  transform: translateY(0);
+  opacity: 1;
+}
+
+.desktop-full-screen .miniplayer-auto-hide-wrapper > * {
+  pointer-events: auto;
 }
 
 .light-mode .miniplayer-chassis {
