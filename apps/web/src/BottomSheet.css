@@ -127,6 +127,6 @@
 
 @media (max-width: 900px) and (orientation: landscape) {
   .bottom-sheet-tray {
-    height: 100vh;
+    height: 85vh; /* Leaves room at the top so the handle isn't trapped under the system edge, and the backdrop can be tapped */
   }
 }
