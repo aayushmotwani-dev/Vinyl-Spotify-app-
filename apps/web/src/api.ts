@@ -89,6 +89,11 @@ export function useNowPlaying() {
       isPlayingRef.current = isPlaying;
       lastUpdateRef.current = Date.now();
 
+      const currentDeviceId = data.device?.id;
+      if (currentDeviceId) {
+        localStorage.setItem('last_spotify_device_id', currentDeviceId);
+      }
+
       setState({
         isPlaying,
         progressMs: progress,
@@ -147,6 +152,13 @@ export function useTransportControls(onNoDevice?: () => void) {
   const putCommand = useCallback(async (endpoint: string, params: Record<string, string> = {}) => {
     const token = await getValidAccessToken();
     if (!token) return;
+
+    if (endpoint === 'play' && !params.device_id) {
+      const lastDeviceId = localStorage.getItem('last_spotify_device_id');
+      if (lastDeviceId) {
+        params.device_id = lastDeviceId;
+      }
+    }
 
     const url = new URL(`https://api.spotify.com/v1/me/player/${endpoint}`);
     Object.keys(params).forEach(key => url.searchParams.append(key, params[key]));
