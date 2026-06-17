@@ -1,14 +1,19 @@
 # Retro Vinyl Spotify Player
 
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Node.js Version](https://img.shields.io/badge/Node.js-v18+-green.svg)](https://nodejs.org/)
+
+![Hero Screenshot](apps/web/src/assets/hero.png)
+
 A beautifully designed, highly interactive, and performant Spotify web player built with React, Vite, and Vercel. This application turns your Spotify library into a collection of retro vinyl records. 
 
 ## Features
--  **Interactive Vinyl Crates:** Browse your Saved Albums, Playlists, and Liked Songs as physical vinyl records in a "crate-digger" style interface.
--  **Dynamic Vinyl Sleeves & Spines:** The edge thickness of each record spine dynamically scales based on the total duration of the album or the number of tracks in the playlist!
--  **Rich Animations:** Smooth 60fps CSS hardware-accelerated animations for platter rotation, tonearm mechanics, and vinyl extraction.
--  **Multiple Turntable Styles & Wear Grades:** Choose from a variety of beautifully rendered turntable styles (Retro Wood, Clear Acrylic, Technics, etc.) and apply customizable "wear & tear" overlays.
--  **Optimized Performance:** Features smart React memoization, `requestAnimationFrame` throttling, and `.webp` compression for a completely lag-free experience on both mobile and desktop.
--  **Fully Responsive:** Feels like a premium native application with a custom BottomSheet interface on mobile devices.
+- 💽 **Interactive Vinyl Crates:** Browse your Saved Albums, Playlists, and Liked Songs as physical vinyl records in a "crate-digger" style interface.
+- 🎨 **Dynamic Vinyl Sleeves & Spines:** The edge thickness of each record spine dynamically scales based on the total duration of the album or the number of tracks in the playlist!
+- ✨ **Rich Animations:** Smooth 60fps CSS hardware-accelerated animations for platter rotation, tonearm mechanics, and vinyl extraction.
+- 🖌️ **Multiple Turntable Styles & Wear Grades:** Choose from a variety of beautifully rendered turntable styles (Retro Wood, Clear Acrylic, Technics, etc.) and apply customizable "wear & tear" overlays (WebP assets compressed for speed).
+- ⚡ **Optimized Performance:** Features smart React memoization, `requestAnimationFrame` throttling, and `.webp` compression for a completely lag-free experience on both mobile and desktop.
+- 📱 **Responsive Layout:** Adjusts beautifully to desktop screens with ongoing mobile polish (like a custom BottomSheet interface).
 
 ---
 
@@ -17,7 +22,8 @@ A beautifully designed, highly interactive, and performant Spotify web player bu
 ### Prerequisites
 1. **Node.js** (v18+ recommended)
 2. **npm**, **yarn**, or **pnpm**
-3. A **Spotify Premium Account** (Required for Spotify Web Playback SDK to play music)
+3. A **Spotify Premium Account** 
+   > **Note**: The Spotify Web Playback SDK strictly requires a Premium account to stream full tracks. If a free user logs in, they will be able to browse their crates, but playback will fail or prompt an error.
 
 ### 1. Create a Spotify Developer App
 To run this application, you need to create your own Spotify Developer App to get a Client ID.
@@ -57,20 +63,26 @@ Start the Vite development server:
 npm run dev
 ```
 Open your browser and navigate to `http://localhost:5173`. 
-*Note: Depending on your network, you may need to whitelist your local IP address in the Spotify Developer Dashboard if you want to access it from your phone on the same WiFi network.*
+
+> **Network Note:** Depending on your network router, you may need to whitelist your local IP address in the Spotify Developer Dashboard if you want to access the app from your phone on the same WiFi network.
 
 ---
 
 ## Deployment (Vercel)
 
-This project is configured to be easily deployed on Vercel. The authentication flow uses Vercel Serverless Functions located in the `apps/web/api/` directory.
+This project is configured to be easily deployed on Vercel. The authentication flow uses Vercel Serverless Functions located in the `apps/web/api/` directory to securely refresh your Spotify token.
 
-1. Install the Vercel CLI: `npm i -g vercel`
-2. Run `vercel` from the root directory to link your project.
-3. When prompted to set up the project, say **Yes**.
-4. Important: Make sure to add the `VITE_SPOTIFY_CLIENT_ID` environment variable in your Vercel Project Settings!
-5. Add your new Vercel production URL (e.g., `https://your-app.vercel.app/callback`) to the **Redirect URIs** in your Spotify Developer Dashboard.
-6. Run `vercel --prod` to deploy to production!
+1. **Install the Vercel CLI:** `npm i -g vercel`
+2. **Link the project:** Run `vercel` from the root directory. When prompted to set up and deploy the project, answer **Yes**.
+3. **Configure Environment Variables:** Before finishing the deployment, make sure to add your `VITE_SPOTIFY_CLIENT_ID` in your Vercel Project Settings online (Settings > Environment Variables).
+4. **Update Spotify Dashboard:** Copy your new Vercel production URL (e.g., `https://your-app.vercel.app/callback`) and add it to the **Redirect URIs** section in your Spotify Developer Dashboard.
+5. **Deploy:** Run `vercel --prod` to deploy your app to production!
+
+---
+
+## Roadmap & Known Issues
+- **Mobile Touch Polish:** We are actively refining touch gestures for the record platter and tonearm on mobile devices.
+- **Additional Themes:** More turntable aesthetics (like futuristic and vintage designs) are currently being built and optimized.
 
 ---
 
