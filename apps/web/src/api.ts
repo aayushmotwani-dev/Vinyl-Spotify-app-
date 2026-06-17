@@ -374,3 +374,76 @@ export async function getPlaylistTracks(id: string) {
     duration_ms: item.track.duration_ms
   }));
 }
+
+export async function getTopTracks(timeRange: 'short_term' | 'medium_term' | 'long_term') {
+  const token = await getValidAccessToken();
+  if (!token) return [];
+  const res = await fetch(`https://api.spotify.com/v1/me/top/tracks?time_range=${timeRange}&limit=50`, {
+    headers: { Authorization: `Bearer ${token}` }
+  });
+  if (!res.ok) return [];
+  const data = await res.json();
+  return data.items.map((item: any) => item.id);
+}
+
+export function useTrackWear(trackId?: string) {
+  const [baseWear, setBaseWear] = useState<number>(0);
+  const [localWear, setLocalWear] = useState<number>(0);
+  const [topTracks, setTopTracks] = useState<{ long: string[], medium: string[], short: string[] } | null>(null);
+
+  useEffect(() => {
+    async function fetchTop() {
+      const cached = localStorage.getItem('spotify_top_tracks');
+      if (cached) {
+        setTopTracks(JSON.parse(cached));
+      }
+      
+      try {
+        const [long, medium, short] = await Promise.all([
+          getTopTracks('long_term'),
+          getTopTracks('medium_term'),
+          getTopTracks('short_term')
+        ]);
+        const fresh = { long, medium, short };
+        setTopTracks(fresh);
+        localStorage.setItem('spotify_top_tracks', JSON.stringify(fresh));
+      } catch (e) {
+        console.error('Failed to fetch top tracks for wear data', e);
+      }
+    }
+    fetchTop();
+  }, []);
+
+  useEffect(() => {
+    if (!trackId || !topTracks) {
+      setBaseWear(0);
+      return;
+    }
+
+    let newBaseWear = 0;
+    const longIndex = topTracks.long.indexOf(trackId);
+    const medIndex = topTracks.medium.indexOf(trackId);
+    const shortIndex = topTracks.short.indexOf(trackId);
+
+    if (longIndex !== -1) {
+      newBaseWear = Math.max(0.4, 1.0 - (longIndex / 50) * 0.6);
+    } else if (medIndex !== -1) {
+      newBaseWear = Math.max(0.2, 0.6 - (medIndex / 50) * 0.4);
+    } else if (shortIndex !== -1) {
+      newBaseWear = Math.max(0.1, 0.4 - (shortIndex / 50) * 0.3);
+    }
+    
+    setBaseWear(newBaseWear);
+  }, [trackId, topTracks]);
+
+  useEffect(() => {
+    if (!trackId) return;
+    const storedPlays = JSON.parse(localStorage.getItem('local_track_plays') || '{}');
+    const plays = storedPlays[trackId] || 0;
+    
+    const addedWear = Math.min(0.5, plays * 0.05);
+    setLocalWear(addedWear);
+  }, [trackId]);
+
+  return { wearGrade: Math.min(1.0, baseWear + localWear) };
+}

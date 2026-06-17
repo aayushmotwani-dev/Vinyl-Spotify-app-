@@ -1,6 +1,6 @@
 import { useEffect, useState, useRef, useCallback } from 'react';
 import { login, handleCallback, getValidAccessToken } from './auth';
-import { useNowPlaying, useTransportControls, getSavedAlbums, getPlaylists, getLikedSongs, getAlbumTracks, getPlaylistTracks } from './api';
+import { useNowPlaying, useTransportControls, getSavedAlbums, getPlaylists, getLikedSongs, getAlbumTracks, getPlaylistTracks, useTrackWear } from './api';
 import { Tonearm } from './Tonearm';
 import { WheelPickerModal } from './WheelPickerModal';
 import { MiniPlayer } from './MiniPlayer';
@@ -17,13 +17,6 @@ const getAesthetic = (id: string) => {
   }
   return aesthetics[Math.abs(hash) % aesthetics.length];
 };
-
-const wearGrades = [
-  { label: 'Pristine (No Wear)', opacity: 0 },
-  { label: 'Light Wear', opacity: 0.2 },
-  { label: 'Medium Wear', opacity: 0.6 },
-  { label: 'Heavy Wear', opacity: 1.0 },
-];
 
 interface ThemeLayout {
   bgImage?: string;
@@ -134,7 +127,8 @@ function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [isInitializing, setIsInitializing] = useState(true);
   const [manualAesthetic, setManualAesthetic] = useState<string | null>(null);
-  const [wearGrade, setWearGrade] = useState<number>(0.6);
+  const { state, refetch, setOptimisticProgress, setOptimisticIsPlaying } = useNowPlaying();
+  const { wearGrade } = useTrackWear(state?.trackId);
   const [currentTheme, setCurrentTheme] = useState('retro');
   const [isCrateOpen, setIsCrateOpen] = useState(false);
   const [shuffleOnTrackChange, setShuffleOnTrackChange] = useState(false);
@@ -185,7 +179,19 @@ function App() {
     shuffleRef.current = shuffleOnTrackChange;
   }, [shuffleOnTrackChange]);
 
-  const { state, refetch, setOptimisticProgress, setOptimisticIsPlaying } = useNowPlaying();
+  useEffect(() => {
+    if (state?.trackId && state?.isPlaying) {
+      const trackId = state.trackId;
+      const timer = setTimeout(() => {
+        const storedPlays = JSON.parse(localStorage.getItem('local_track_plays') || '{}');
+        const currentPlays = storedPlays[trackId] || 0;
+        storedPlays[trackId] = currentPlays + 1;
+        localStorage.setItem('local_track_plays', JSON.stringify(storedPlays));
+      }, 15000); // Record a play after 15 seconds of continuous playback
+      
+      return () => clearTimeout(timer);
+    }
+  }, [state?.trackId, state?.isPlaying]);
   const [albums, setAlbums] = useState<any[]>([]);
   const [playlists, setPlaylists] = useState<any[]>([]);
   const [likedSongs, setLikedSongs] = useState<any[]>([]);
@@ -592,15 +598,6 @@ function App() {
                   {manualAesthetic ? manualAesthetic.charAt(0).toUpperCase() + manualAesthetic.slice(1) : `Auto (${rngAesthetic})`}
                 </div>
               </div>
-              
-              <div className="config-group">
-                <label onClick={() => toggleConfig('wear')} style={{ cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '8px', userSelect: 'none' }}>
-                  <span style={{ fontSize: '0.8em', transition: 'transform 0.2s', transform: collapsedSettings.wear ? 'rotate(-90deg)' : 'rotate(0)' }}>▼</span> Wear & Tear
-                </label>
-                <div className="custom-select-trigger" onClick={() => setActivePicker('wear')} style={{ display: collapsedSettings.wear ? 'none' : 'block' }}>
-                  {wearGrades.find(w => w.opacity === wearGrade)?.label || 'Medium Wear'}
-                </div>
-              </div>
 
               <WheelPickerModal 
                 isOpen={activePicker === 'theme'}
@@ -621,15 +618,6 @@ function App() {
                   { label: `Auto (${rngAesthetic})`, value: 'auto' },
                   ...aesthetics.map(a => ({ label: a.charAt(0).toUpperCase() + a.slice(1), value: a }))
                 ]}
-              />
-
-              <WheelPickerModal 
-                isOpen={activePicker === 'wear'}
-                onClose={() => setActivePicker(null)}
-                title="Select Wear & Tear"
-                value={wearGrade.toString()}
-                onChange={(val) => setWearGrade(Number(val))}
-                options={wearGrades.map(g => ({ label: g.label, value: g.opacity.toString() }))}
               />
 
               <div className="checkbox-row">
