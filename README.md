@@ -3,9 +3,15 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Node.js Version](https://img.shields.io/badge/Node.js-v18+-green.svg)](https://nodejs.org/)
 
-![Hero Screenshot](apps/web/src/assets/hero.png)
+![Retro Turntable](docs/images/retro-turntable.png)
 
 A beautifully designed, highly interactive, and performant Spotify web player built with React, Vite, and Vercel. This application turns your Spotify library into a collection of retro vinyl records. 
+
+### Gallery
+<p align="center">
+  <img src="docs/images/clear-tech-turntable.png" width="48%" />
+  <img src="docs/images/config-menu.png" width="48%" />
+</p>
 
 ## Features
 - 💽 **Interactive Vinyl Crates:** Browse your Saved Albums, Playlists, and Liked Songs as physical vinyl records in a "crate-digger" style interface.
