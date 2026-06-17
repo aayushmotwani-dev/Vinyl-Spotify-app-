@@ -1,8 +1,8 @@
 :root {
-  --bg-primary: #000000;
-  --bg-panel: rgba(255, 255, 255, 0.03);
-  --bg-panel-border: rgba(255, 255, 255, 0.05);
-  --bg-panel-shadow: 0 20px 40px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  --bg-primary: #0a0a0c;
+  --bg-panel: rgba(255, 255, 255, 0.04);
+  --bg-panel-border: rgba(255, 255, 255, 0.08);
+  --bg-panel-shadow: 0 24px 48px rgba(0, 0, 0, 0.6), inset 0 1px 1px rgba(255, 255, 255, 0.15);
   --text-primary: #ffffff;
   --text-secondary: rgba(255, 255, 255, 0.7);
   --text-muted: rgba(255, 255, 255, 0.4);
@@ -11,7 +11,7 @@
 
   /* Default Theme Tokens (Retro) */
   --chassis-bg: repeating-linear-gradient(100deg, #5a3a22 0px, #6b4530 8px, #4a2f1c 16px, #5a3a22 24px);
-  --chassis-shadow: 0 8px 32px rgba(0,0,0,0.6), inset 0 1px 0 rgba(255,200,150,0.12);
+  --chassis-shadow: 0 16px 48px rgba(0,0,0,0.8), 0 0 120px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,200,150,0.12);
   --accent-color: #d4a574;
   --accent-color-rgb: 212, 165, 116;
   --tonearm-metal-light: #e8dcc8;
@@ -202,10 +202,10 @@
   height: 100vh; /* Lock height to prevent page scrolling */
   padding: 1.5rem;
   background-color: var(--bg-primary);
-  background-image: url('/themes/global_silk_bg.webp');
-  background-size: cover;
-  background-position: center;
-  background-blend-mode: overlay;
+  background-image: radial-gradient(circle at 50% 40%, rgba(255, 255, 255, 0.06) 0%, transparent 60%), url('/themes/global_silk_bg.webp');
+  background-size: 100% 100%, cover;
+  background-position: center, center;
+  background-blend-mode: screen, overlay;
   align-items: center;
   box-sizing: border-box;
   overflow: hidden; /* No outer scrollbars! */
