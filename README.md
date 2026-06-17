@@ -3,12 +3,12 @@
 A beautifully designed, highly interactive, and performant Spotify web player built with React, Vite, and Vercel. This application turns your Spotify library into a collection of retro vinyl records. 
 
 ## Features
-- 💽 **Interactive Vinyl Crates:** Browse your Saved Albums, Playlists, and Liked Songs as physical vinyl records in a "crate-digger" style interface.
-- 🎨 **Dynamic Vinyl Sleeves & Spines:** The edge thickness of each record spine dynamically scales based on the total duration of the album or the number of tracks in the playlist!
-- ✨ **Rich Animations:** Smooth 60fps CSS hardware-accelerated animations for platter rotation, tonearm mechanics, and vinyl extraction.
-- 🖌️ **Multiple Turntable Styles & Wear Grades:** Choose from a variety of beautifully rendered turntable styles (Retro Wood, Clear Acrylic, Technics, etc.) and apply customizable "wear & tear" overlays.
-- ⚡ **Optimized Performance:** Features smart React memoization, `requestAnimationFrame` throttling, and `.webp` compression for a completely lag-free experience on both mobile and desktop.
-- 📱 **Fully Responsive:** Feels like a premium native application with a custom BottomSheet interface on mobile devices.
+-  **Interactive Vinyl Crates:** Browse your Saved Albums, Playlists, and Liked Songs as physical vinyl records in a "crate-digger" style interface.
+-  **Dynamic Vinyl Sleeves & Spines:** The edge thickness of each record spine dynamically scales based on the total duration of the album or the number of tracks in the playlist!
+-  **Rich Animations:** Smooth 60fps CSS hardware-accelerated animations for platter rotation, tonearm mechanics, and vinyl extraction.
+-  **Multiple Turntable Styles & Wear Grades:** Choose from a variety of beautifully rendered turntable styles (Retro Wood, Clear Acrylic, Technics, etc.) and apply customizable "wear & tear" overlays.
+-  **Optimized Performance:** Features smart React memoization, `requestAnimationFrame` throttling, and `.webp` compression for a completely lag-free experience on both mobile and desktop.
+-  **Fully Responsive:** Feels like a premium native application with a custom BottomSheet interface on mobile devices.
 
 ---
 
