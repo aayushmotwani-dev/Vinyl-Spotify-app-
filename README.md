@@ -40,12 +40,15 @@ npm install
 ```
 
 ### 3. Environment Variables
-Create a new file named `.env.local` in the root of the project (next to `.env.example`).
-Add your Spotify Client ID to the file:
+Create a new file named `.env.local` in the root of the project (you can also just rename the included `.env.example` file to `.env.local`). 
+
+Add your Spotify Client ID to the file like this:
 
 ```env
 VITE_SPOTIFY_CLIENT_ID=your_spotify_client_id_here
 ```
+
+*(Note: We use `.env.local` instead of a regular `.env` file because it is included in the `.gitignore`. This ensures that if you decide to push your own version of this code to GitHub later, your personal Spotify credentials will remain completely safe and hidden from the public!)*
 
 ### 4. Run the Development Server
 Start the Vite development server:
