@@ -21,7 +21,7 @@ export async function generateCodeChallenge(verifier: string) {
 const clientId = import.meta.env.VITE_SPOTIFY_CLIENT_ID;
 // NOTE: You must whitelist your network IP address (e.g. http://192.168.178.107:5173/callback) in the Spotify Developer Dashboard.
 const redirectUri = window.location.origin + '/callback';
-const scopes = 'user-read-playback-state user-read-currently-playing user-modify-playback-state playlist-read-private user-library-read user-top-read';
+const scopes = 'user-read-playback-state user-read-currently-playing user-modify-playback-state playlist-read-private user-library-read';
 
 export async function login() {
   if (!clientId) {
