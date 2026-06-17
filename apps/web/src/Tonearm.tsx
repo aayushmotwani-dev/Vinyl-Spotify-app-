@@ -40,8 +40,13 @@ function TonearmInner({
   const [debugExpanded, setDebugExpanded] = useState(false);
 
   useEffect(() => {
-    audioRef.current = new Audio('/thump.wav');
-    audioRef.current.volume = 0.03; // Make the sound very soft
+    // Only initialize the audio on non-touch devices (desktops).
+    // Playing HTML5 audio on iOS/Android steals the OS audio focus,
+    // which immediately forces the background Spotify app to pause!
+    if (typeof window !== 'undefined' && !('ontouchstart' in window)) {
+      audioRef.current = new Audio('/thump.wav');
+      audioRef.current.volume = 0.03; // Make the sound very soft
+    }
   }, []);
 
   const prevIsPlaying = useRef(isPlaying);
