@@ -47,6 +47,7 @@ interface MiniPlayerProps {
 }
 
 function MiniPlayerInner({ trackName, artistName, isPlaying, onPlayPause, onSkipNext, onSkipPrev, durationMs, progressMs }: MiniPlayerProps) {
+  const [isCollapsed, setIsCollapsed] = useState(false);
   
   const formatTime = (ms: number) => {
     if (!ms) return "0:00";
@@ -55,6 +56,16 @@ function MiniPlayerInner({ trackName, artistName, isPlaying, onPlayPause, onSkip
     const s = totalSeconds % 60;
     return `${m}:${s.toString().padStart(2, '0')}`;
   };
+
+  if (isCollapsed) {
+    return (
+      <div className="miniplayer-chassis collapsed">
+        <button onClick={() => setIsCollapsed(false)} className="hardware-button" aria-label="Expand Player" title="Expand Player">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 8l-6 6 1.41 1.41L12 10.83l4.59 4.58L18 14z"/></svg>
+        </button>
+      </div>
+    );
+  }
 
   return (
     <div className="miniplayer-chassis">
@@ -84,6 +95,12 @@ function MiniPlayerInner({ trackName, artistName, isPlaying, onPlayPause, onSkip
         </button>
         <button onClick={onSkipNext} className="hardware-button" aria-label="Next Track">
           <svg viewBox="0 0 24 24" fill="currentColor"><path d="M6 18l8.5-6L6 6v12zM16 6v12h2V6h-2z"/></svg>
+        </button>
+        
+        {/* Collapse Button */}
+        <div style={{ width: '1px', height: '20px', background: 'rgba(255,255,255,0.1)', margin: '0 4px' }} />
+        <button onClick={() => setIsCollapsed(true)} className="hardware-button" aria-label="Collapse Player" title="Collapse Player" style={{ width: '28px' }}>
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M16.59 8.59L12 13.17 7.41 8.59 6 10l6 6 6-6z"/></svg>
         </button>
       </div>
     </div>

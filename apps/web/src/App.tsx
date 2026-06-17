@@ -503,18 +503,16 @@ function App() {
           
           {/* MINI PLAYER */}
           <div className="mini-player-wrapper">
-            <div className="miniplayer-auto-hide-wrapper">
-              <MiniPlayer 
-                trackName={state.trackName}
-                artistName={state.artistName}
-                isPlaying={state.isPlaying}
-                onPlayPause={handlePlayPause}
-                onSkipNext={handleSkipNext}
-                onSkipPrev={handleSkipPrev}
-                durationMs={state.durationMs}
-                progressMs={state.progressMs}
-              />
-            </div>
+            <MiniPlayer 
+              trackName={state.trackName}
+              artistName={state.artistName}
+              isPlaying={state.isPlaying}
+              onPlayPause={handlePlayPause}
+              onSkipNext={handleSkipNext}
+              onSkipPrev={handleSkipPrev}
+              durationMs={state.durationMs}
+              progressMs={state.progressMs}
+            />
           </div>
         </div>
       </div>
