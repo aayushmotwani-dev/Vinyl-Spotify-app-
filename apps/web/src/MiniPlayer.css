@@ -184,38 +184,39 @@
   }
 }
 
+/* Default: Static wrapper for normal mobile portrait (no hiding, no blocking) */
 .miniplayer-auto-hide-wrapper {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  padding-bottom: 150px; /* Massive hit area below to prevent losing hover when it slides up */
-  margin-bottom: -100px; /* Offset the padding */
-  padding-top: 60px; /* Hit area above */
+  width: 100%;
   display: flex;
   justify-content: center;
-  transform: translateY(calc(100% - 50px)); /* Leaves a small invisible hit area at the bottom */
-  transition: transform 0.8s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.8s ease;
-  opacity: 0;
   z-index: 100;
-  pointer-events: none; /* Prevent blocking underneath */
 }
 
-.miniplayer-auto-hide-wrapper:hover,
-.miniplayer-auto-hide-wrapper:active,
-.miniplayer-auto-hide-wrapper:focus-within {
-  transform: translateY(0);
-  opacity: 1;
-}
-
-.miniplayer-auto-hide-wrapper > * {
-  pointer-events: auto; /* Re-enable pointer events for the player itself */
-}
-
-@media (min-width: 900px) {
-  /* On desktop, the wrapper needs to be absolute over the right pane */
+/* Auto-Hide ONLY triggers on Desktop or Landscape Mobile */
+@media (min-width: 900px), (max-height: 500px) and (orientation: landscape) {
   .miniplayer-auto-hide-wrapper {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding-bottom: 150px; /* Massive hit area below */
+    margin-bottom: -100px; /* Offset the padding */
+    padding-top: 60px; /* Hit area above */
     transform: translateY(calc(100% - 70px));
+    transition: transform 0.8s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.8s ease;
+    opacity: 0;
+    pointer-events: none; /* Prevent blocking underneath */
+  }
+
+  .miniplayer-auto-hide-wrapper:hover,
+  .miniplayer-auto-hide-wrapper:active,
+  .miniplayer-auto-hide-wrapper:focus-within {
+    transform: translateY(0);
+    opacity: 1;
+  }
+
+  .miniplayer-auto-hide-wrapper > * {
+    pointer-events: auto; /* Re-enable pointer events for the player itself */
   }
 }
 
