@@ -1,0 +1,126 @@
+.bottom-sheet-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.5);
+  z-index: 90;
+  backdrop-filter: blur(2px);
+  transition: opacity 0.3s;
+}
+
+.bottom-sheet-tray {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
+  max-width: 600px;
+  margin: 0 auto;
+  height: calc(55vh + env(safe-area-inset-bottom, 0px));
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+  background: var(--bg-primary); /* The inside of the crate */
+  z-index: 100;
+  transform: translateY(calc(100% - 32px - env(safe-area-inset-bottom, 0px))); /* 32px is the handle height */
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 -10px 40px rgba(0,0,0,0.8);
+  border-top: 2px solid rgba(255,255,255,0.1);
+  border-left: 2px solid rgba(255,255,255,0.05);
+  border-right: 2px solid rgba(255,255,255,0.05);
+  border-top-left-radius: 24px;
+  border-top-right-radius: 24px;
+  display: flex;
+  flex-direction: column;
+}
+
+.bottom-sheet-tray.open {
+  transform: translateY(0);
+}
+
+.tray-handle {
+  height: 32px;
+  background: var(--miniplayer-chassis-bg);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  border-bottom: 2px solid rgba(0,0,0,0.8);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.2);
+  transition: filter 0.15s ease;
+}
+
+.tray-handle:hover {
+  filter: brightness(1.15);
+}
+
+.handle-texture {
+  position: absolute;
+  inset: 4px 50px;
+  background: var(--sheet-handle-texture);
+  border-radius: 12px;
+  box-shadow: inset 0 1px 3px rgba(0,0,0,0.5);
+}
+
+.handle-label {
+  position: relative;
+  z-index: 2;
+  font-family: var(--font-hardware);
+  font-size: 12px;
+  font-weight: bold;
+  letter-spacing: 2px;
+  color: var(--miniplayer-bezel-color);
+  background: var(--miniplayer-chassis-bg);
+  padding: 0 10px;
+  /* Make it look like stamped text */
+  text-shadow: 0 1px 0 rgba(255,255,255,0.2);
+}
+
+.handle-chevron {
+  position: absolute;
+  right: 16px;
+  z-index: 2;
+  font-size: 10px;
+  color: var(--miniplayer-bezel-color);
+  opacity: 0.7;
+  transition: opacity 0.2s;
+}
+
+.tray-handle:hover .handle-chevron {
+  opacity: 1;
+}
+
+.tray-content {
+  flex-grow: 1;
+  overflow-y: auto;
+  padding: 16px;
+  /* Mechanical inner shadow */
+  box-shadow: inset 0 10px 20px rgba(0,0,0,0.5);
+  display: flex;
+  flex-direction: column;
+}
+
+
+
+.light-mode .bottom-sheet-tray {
+  background: var(--bg-primary);
+  border-top: 2px solid rgba(0,0,0,0.1);
+  border-left: 2px solid rgba(0,0,0,0.05);
+  border-right: 2px solid rgba(0,0,0,0.05);
+}
+.light-mode .tray-handle {
+  background: linear-gradient(to bottom, #f0f0f0, #d0d0d0);
+  border-top: 1px solid #fff;
+  border-bottom: 1px solid #aaa;
+}
+.light-mode .handle-label {
+  color: #333;
+  text-shadow: 0 1px 0 rgba(255,255,255,0.8);
+}
+.light-mode .tray-content {
+  background: var(--bg-primary);
+  border-top: 2px solid #ccc;
+  box-shadow: inset 0 10px 20px rgba(0,0,0,0.1);
+}
+.light-mode .configuration-section {
+  background: rgba(255, 255, 255, 0.6);
+  border: 1px solid rgba(0,0,0,0.1);
+}

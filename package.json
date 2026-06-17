@@ -1,0 +1,8 @@
+{
+  "name": "vinyl-deck",
+  "private": true,
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ]
+}

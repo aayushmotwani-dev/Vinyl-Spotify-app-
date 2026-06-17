@@ -1,0 +1,40 @@
+.tonearm-container {
+  position: absolute;
+  top: 0px;
+  left: 420px; /* Pivot is placed perfectly outside the top right of the record */
+  width: 0;
+  height: 0;
+  z-index: 10;
+  overflow: visible;
+}
+
+.tonearm {
+  --scale: var(--tonearm-scale, 1px);
+  position: absolute;
+  top: calc(-40 * var(--scale));
+  left: calc(-40 * var(--scale));
+  width: calc(80 * var(--scale));
+  height: calc(340 * var(--scale));
+  transform-origin: calc(40 * var(--scale)) calc(40 * var(--scale));
+  transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1), filter 0.2s ease;
+  pointer-events: auto;
+  cursor: grab;
+  touch-action: none; /* Fix mobile dragging */
+  will-change: transform, filter;
+}
+
+.tonearm.lifted {
+  filter: drop-shadow(-15px 25px 12px rgba(0,0,0,0.5));
+}
+
+.tonearm.playing {
+  filter: drop-shadow(-4px 8px 6px rgba(0,0,0,0.7));
+}
+
+.tonearm.dragging {
+  transition: none;
+}
+
+.tonearm:active {
+  cursor: grabbing;
+}
