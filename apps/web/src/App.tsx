@@ -18,6 +18,13 @@ const getAesthetic = (id: string) => {
   return aesthetics[Math.abs(hash) % aesthetics.length];
 };
 
+const wearGrades = [
+  { label: 'Pristine (No Wear)', opacity: 0 },
+  { label: 'Light Wear', opacity: 0.2 },
+  { label: 'Medium Wear', opacity: 0.6 },
+  { label: 'Heavy Wear', opacity: 1.0 },
+];
+
 interface ThemeLayout {
   bgImage?: string;
   aspectRatio?: string;
@@ -128,7 +135,10 @@ function App() {
   const [isInitializing, setIsInitializing] = useState(true);
   const [manualAesthetic, setManualAesthetic] = useState<string | null>(null);
   const { state, refetch, setOptimisticProgress, setOptimisticIsPlaying } = useNowPlaying();
-  const { wearGrade } = useTrackWear(state?.trackId);
+  const [manualWearGrade, setManualWearGrade] = useState<number | null>(null);
+  const [shuffleWear, setShuffleWear] = useState(true);
+  const { wearGrade: autoWearGrade } = useTrackWear(state?.trackId);
+  const wearGrade = shuffleWear ? autoWearGrade : (manualWearGrade ?? 0.6);
   const [currentTheme, setCurrentTheme] = useState('retro');
   const [isCrateOpen, setIsCrateOpen] = useState(false);
   const [shuffleOnTrackChange, setShuffleOnTrackChange] = useState(false);
@@ -599,6 +609,15 @@ function App() {
                 </div>
               </div>
 
+              <div className="config-group">
+                <label onClick={() => toggleConfig('wear')} style={{ cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '8px', userSelect: 'none' }}>
+                  <span style={{ fontSize: '0.8em', transition: 'transform 0.2s', transform: collapsedSettings.wear ? 'rotate(-90deg)' : 'rotate(0)' }}>▼</span> Wear & Tear
+                </label>
+                <div className="custom-select-trigger" onClick={() => setActivePicker('wear')} style={{ display: collapsedSettings.wear ? 'none' : 'block' }}>
+                  {shuffleWear ? `Auto (${wearGrades.find(w => w.opacity === autoWearGrade)?.label || 'Dynamic'})` : (wearGrades.find(w => w.opacity === manualWearGrade)?.label || 'Medium Wear')}
+                </div>
+              </div>
+
               <WheelPickerModal 
                 isOpen={activePicker === 'theme'}
                 onClose={() => setActivePicker(null)}
@@ -619,6 +638,35 @@ function App() {
                   ...aesthetics.map(a => ({ label: a.charAt(0).toUpperCase() + a.slice(1), value: a }))
                 ]}
               />
+
+              <WheelPickerModal 
+                isOpen={activePicker === 'wear'}
+                onClose={() => setActivePicker(null)}
+                title="Select Wear & Tear"
+                value={shuffleWear ? 'auto' : (manualWearGrade?.toString() || '0.6')}
+                onChange={(val) => {
+                  if (val === 'auto') {
+                    setShuffleWear(true);
+                  } else {
+                    setShuffleWear(false);
+                    setManualWearGrade(Number(val));
+                  }
+                }}
+                options={[
+                  { label: 'Auto (Spotify History)', value: 'auto' },
+                  ...wearGrades.map(g => ({ label: g.label, value: g.opacity.toString() }))
+                ]}
+              />
+
+              <div className="checkbox-row" style={{ marginBottom: '8px' }}>
+                <button className="transport-btn shuffle-btn" onClick={() => setShuffleWear(!shuffleWear)} style={{ color: shuffleWear ? '#e5b07b' : '' }}>
+                  Shuffle Wear
+                </button>
+                <label className="checkbox-label">
+                  <input type="checkbox" checked={shuffleWear} onChange={e => setShuffleWear(e.target.checked)} />
+                  AUTO-UPDATE WEAR
+                </label>
+              </div>
 
               <div className="checkbox-row">
                 <button className="transport-btn shuffle-btn" onClick={() => setShuffleOnTrackChange(!shuffleOnTrackChange)} style={{ color: shuffleOnTrackChange ? '#e5b07b' : '' }}>
