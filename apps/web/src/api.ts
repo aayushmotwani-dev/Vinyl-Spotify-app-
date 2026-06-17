@@ -153,14 +153,12 @@ export function useTransportControls(onNoDevice?: () => void) {
     const token = await getValidAccessToken();
     if (!token) return;
 
-    if (endpoint === 'play' && !params.device_id) {
-      const lastDeviceId = localStorage.getItem('last_spotify_device_id');
-      if (lastDeviceId) {
-        params.device_id = lastDeviceId;
-      }
-    }
-
     const url = new URL(`https://api.spotify.com/v1/me/player/${endpoint}`);
+    const lastDeviceId = localStorage.getItem('last_spotify_device_id');
+    if (lastDeviceId && !params.device_id) {
+      url.searchParams.append('device_id', lastDeviceId);
+    }
+    
     Object.keys(params).forEach(key => url.searchParams.append(key, params[key]));
 
     const response = await fetch(url.toString(), {
@@ -181,6 +179,11 @@ export function useTransportControls(onNoDevice?: () => void) {
     if (!token) return;
 
     const url = new URL(`https://api.spotify.com/v1/me/player/${endpoint}`);
+    const lastDeviceId = localStorage.getItem('last_spotify_device_id');
+    if (lastDeviceId && !params.device_id) {
+      url.searchParams.append('device_id', lastDeviceId);
+    }
+
     Object.keys(params).forEach(key => url.searchParams.append(key, params[key]));
 
     const response = await fetch(url.toString(), {
@@ -211,7 +214,12 @@ export function useTransportControls(onNoDevice?: () => void) {
       body.offset = { uri: track_uri };
     }
 
-    const response = await fetch('https://api.spotify.com/v1/me/player/play', {
+    const lastDeviceId = localStorage.getItem('last_spotify_device_id');
+    const url = lastDeviceId 
+      ? `https://api.spotify.com/v1/me/player/play?device_id=${lastDeviceId}`
+      : 'https://api.spotify.com/v1/me/player/play';
+
+    const response = await fetch(url, {
       method: 'PUT',
       headers: { 
         Authorization: `Bearer ${token}`,
@@ -237,7 +245,12 @@ export function useTransportControls(onNoDevice?: () => void) {
       body.offset = { uri: track_uri };
     }
 
-    const response = await fetch('https://api.spotify.com/v1/me/player/play', {
+    const lastDeviceId = localStorage.getItem('last_spotify_device_id');
+    const url = lastDeviceId 
+      ? `https://api.spotify.com/v1/me/player/play?device_id=${lastDeviceId}`
+      : 'https://api.spotify.com/v1/me/player/play';
+
+    const response = await fetch(url, {
       method: 'PUT',
       headers: { 
         Authorization: `Bearer ${token}`,
