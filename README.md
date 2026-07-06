@@ -46,8 +46,8 @@ To run this application, you need to create your own Spotify Developer App to ge
 Clone this repository and install dependencies:
 
 ```bash
-git clone https://github.com/your-username/your-repo-name.git
-cd your-repo-name
+git clone https://github.com/aayushmotwani-dev/Vinyl-Spotify-app-.git
+cd Vinyl-Spotify-app-
 npm install
 ```
 
