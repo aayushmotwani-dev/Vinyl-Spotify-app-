@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import Picker from 'react-mobile-picker';
 import './WheelPickerModal.css';
 
@@ -18,12 +18,16 @@ interface Props {
 
 export function WheelPickerModal({ isOpen, onClose, options, value, onChange, title }: Props) {
   const [pickerValue, setPickerValue] = useState({ selected: value });
+  const [prevValue, setPrevValue] = useState(value);
+  const [prevIsOpen, setPrevIsOpen] = useState(isOpen);
 
-  useEffect(() => {
-    if (isOpen) {
-      setPickerValue({ selected: value });
-    }
-  }, [value, isOpen]);
+  if (value !== prevValue || (isOpen && !prevIsOpen)) {
+    setPrevValue(value);
+    setPrevIsOpen(isOpen);
+    setPickerValue({ selected: value });
+  } else if (prevIsOpen !== isOpen) {
+    setPrevIsOpen(isOpen);
+  }
 
   if (!isOpen) return null;
 

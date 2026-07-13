@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef, useCallback } from 'react';
+import { useState, useEffect, useRef, useCallback, useMemo } from 'react';
 import { getValidAccessToken } from './auth';
 
 export interface NowPlayingState {
@@ -17,7 +17,8 @@ export function useNowPlaying() {
   const [state, setState] = useState<NowPlayingState | null>(null);
   const progressRef = useRef<number>(0);
   const isPlayingRef = useRef<boolean>(false);
-  const lastUpdateRef = useRef<number>(Date.now());
+  const [now] = useState(() => Date.now());
+  const lastUpdateRef = useRef<number>(now);
   const requestRef = useRef<number>(0);
   const lastSeekTimeRef = useRef<number>(0);
 
@@ -120,7 +121,7 @@ export function useNowPlaying() {
 
   // Polling effect (every 3 seconds)
   useEffect(() => {
-    fetchPlayerState();
+    (async () => { await fetchPlayerState(); })();
     const intervalId = setInterval(fetchPlayerState, 3000);
     return () => clearInterval(intervalId);
   }, [fetchPlayerState]);
@@ -376,15 +377,9 @@ export async function getPlaylistTracks(id: string) {
 }
 
 export function useTrackWear(trackId?: string) {
-  const [baseWear, setBaseWear] = useState<number>(0);
-  const [localWear, setLocalWear] = useState<number>(0);
-
-  useEffect(() => {
-    if (!trackId) {
-      setBaseWear(0);
-      return;
-    }
-
+  const baseWear = useMemo(() => {
+    if (!trackId) return 0;
+    
     // Generate a deterministic random value based on trackId
     let hash = 0;
     for (let i = 0; i < trackId.length; i++) {
@@ -395,24 +390,20 @@ export function useTrackWear(trackId?: string) {
     const normalized = Math.abs(hash) % 100 / 100;
     
     // Distribute randomly across the spectrum
-    // 0.0 to 0.4 (Pristine to Light)
-    // 0.4 to 0.7 (Medium)
-    // 0.7 to 1.0 (Heavy to Ruined)
-    let randomWear = 0;
-    if (normalized < 0.5) randomWear = normalized * 0.4; // 50% chance of light/pristine
-    else if (normalized < 0.8) randomWear = 0.4 + (normalized - 0.5) * 1.0; // 30% chance medium
-    else randomWear = 0.7 + (normalized - 0.8) * 1.5; // 20% chance heavy/ruined
+    let randomWear;
+    if (normalized < 0.5) randomWear = normalized * 0.4;
+    else if (normalized < 0.8) randomWear = 0.4 + (normalized - 0.5) * 1.0;
+    else randomWear = 0.7 + (normalized - 0.8) * 1.5;
     
-    setBaseWear(Math.min(1.0, Math.max(0, randomWear)));
+    return Math.min(1.0, Math.max(0, randomWear));
   }, [trackId]);
 
-  useEffect(() => {
-    if (!trackId) return;
+  const localWear = useMemo(() => {
+    if (!trackId) return 0;
     const storedPlays = JSON.parse(localStorage.getItem('local_track_plays') || '{}');
     const plays = storedPlays[trackId] || 0;
     
-    const addedWear = Math.min(0.5, plays * 0.05);
-    setLocalWear(addedWear);
+    return Math.min(0.5, plays * 0.05);
   }, [trackId]);
 
   return { wearGrade: Math.min(1.0, baseWear + localWear) };

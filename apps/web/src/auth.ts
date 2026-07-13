@@ -120,7 +120,7 @@ export async function refreshAccessToken() {
     }
     
     return null;
-  } catch (error) {
+  } catch {
     clearSession();
     return null;
   }

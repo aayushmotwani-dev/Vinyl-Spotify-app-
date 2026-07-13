@@ -230,11 +230,12 @@ function App() {
     return 20;
   };
 
-  useEffect(() => {
+  const handleTabChange = (tab: 'browser' | 'config') => {
+    setActiveTab(tab);
     setActiveIndex(0);
     setIsVinylExtracted(false);
     setTracklistData(null);
-  }, [activeTab]);
+  };
 
   useEffect(() => {
     if (isAuthenticated) {
@@ -544,13 +545,13 @@ function App() {
             <div className="crate-tabs">
             <button 
               className={`crate-tab ${activeTab === 'browser' ? 'active' : ''}`}
-              onClick={() => setActiveTab('browser')}
+              onClick={() => handleTabChange('browser')}
             >
               My Music
             </button>
             <button 
               className={`crate-tab ${activeTab === 'config' ? 'active' : ''}`}
-              onClick={() => setActiveTab('config')}
+              onClick={() => handleTabChange('config')}
             >
               Config
             </button>
