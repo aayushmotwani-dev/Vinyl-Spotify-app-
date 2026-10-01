@@ -79,7 +79,7 @@ Open your browser and navigate to `http://localhost:5173`.
 This project is configured to be easily deployed on Vercel. The authentication flow uses Vercel Serverless Functions located in the `apps/web/api/` directory to securely refresh your Spotify token.
 
 1. **Install the Vercel CLI:** `npm i -g vercel`
-2. **Link the project:** Run `vercel` from the root directory. When prompted to set up and deploy the project, answer **Yes**.
+2. **Link the project:** Run `vercel` from the root directory, and set the project's **Root Directory** to `apps/web` in Vercel Settings (otherwise the serverless functions in `apps/web/api` will not deploy and `/callback` returns 404). When prompted to set up and deploy the project, answer **Yes**.
 3. **Configure Environment Variables:** Before finishing the deployment, make sure to add your `VITE_SPOTIFY_CLIENT_ID` in your Vercel Project Settings online (Settings > Environment Variables).
 4. **Update Spotify Dashboard:** Copy your new Vercel production URL (e.g., `https://your-app.vercel.app/callback`) and add it to the **Redirect URIs** section in your Spotify Developer Dashboard.
 5. **Deploy:** Run `vercel --prod` to deploy your app to production!
